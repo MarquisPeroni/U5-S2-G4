@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,7 +12,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
-Route::put('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->middleware('auth');
 
-
-
+// Rotte per il profilo utente
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/{id}/edit', [UserController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/{id}', [UserController::class, 'update'])->name('profile.update');
+});
